@@ -1,0 +1,53 @@
+# =========================
+# 1. BACKEND (C# / .NET)
+# =========================
+# Arquivos compilados
+[Bb]in/
+[Oo]bj/
+
+# Arquivos de usuário do Visual Studio
+*.user
+*.suo
+
+# Banco de Dados SQLite (Ignora todos, exceto o inicial)
+*.db
+*.sqlite
+*.db-shm
+*.db-wal
+!gamecatalog.db 
+
+# SEGURANÇA: Configurações locais (Onde ficam as senhas no C#)
+appsettings.Development.json
+appsettings.Local.json
+secrets.json
+
+# =========================
+# 2. FRONTEND (React / Node)
+# =========================
+# Dependências e builds
+node_modules/
+dist/
+build/
+
+# Logs de erro
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# SEGURANÇA: Variáveis de Ambiente (Onde ficam as senhas no React)
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# =========================
+# 3. SISTEMA OPERACIONAL E IDE
+# =========================
+# Arquivos lixo de Mac e Windows
+.DS_Store
+Thumbs.db
+
+# Configurações pessoais do VS Code (Opcional, mas recomendado ignorar)
+.vscode/
+.idea/
