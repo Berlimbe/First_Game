@@ -10,9 +10,9 @@ namespace First_Game.backend.Domain.Entities
             Experience += quantidade;
             if (Experience >= 100) // Lógica simples 
             {
-                Nivel++;
+                Level++;
                 Experience = 0;
-                Console.WriteLine($"{Nome} subiu para o nível {Level}!");
+                Console.WriteLine($"{Name} subiu para o nível {Level}!");
             }
         }
     }

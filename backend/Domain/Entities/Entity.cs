@@ -1,3 +1,6 @@
+using System;
+using First_Game.backend.Domain.Enums;
+
 namespace First_Game.backend.Domain.Entities 
 {
     public abstract class Entity
@@ -19,10 +22,10 @@ namespace First_Game.backend.Domain.Entities
             int finalDamage = damage - Defense;
             if (finalDamage < 0) finalDamage = 0;
 
-            Life -= FinalDamage;
+            Life -= finalDamage;
             if(Life < 0) Life = 0;
 
-            System.Console.WriteLine($"{Name} recebeu {FinalDamage} de dano. Vida restante: {Life}");
+            System.Console.WriteLine($"{Name} recebeu {finalDamage} de dano. Vida restante: {Life}");
         }
 
         public void Heal(int amount)
@@ -31,6 +34,6 @@ namespace First_Game.backend.Domain.Entities
             if (Life > LifeMax) Life = LifeMax;
         }
 
-        public abstract void ExecuteTurn(Entity alvo);
+        public abstract void ExecuteTurn(Entity target);
     }
 }
