@@ -1,0 +1,65 @@
+/* Reseta a tela para ocupar 100% do espaço sem barras de rolagem */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #000;
+  color: white;
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* O contêiner principal que segura a tela toda */
+.arena-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  /* A imagem de fundo será aplicada via React, mas garantimos o ajuste aqui */
+  background-size: cover;
+  background-position: center;
+}
+
+/* A área central de combate */
+.battlefield {
+  flex: 1; /* Ocupa todo o espaço restante */
+  display: flex;
+  justify-content: space-between; /* Empurra um pra esquerda e um pra direita */
+  align-items: center;
+  padding: 0 10%; /* Margem de respiro nas laterais */
+}
+
+/* O rodapé de comandos */
+.action-menu {
+  height: 150px;
+  background-color: #2D241E;
+  border-top: 4px solid #C5A059;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px; /* Espaço entre os botões */
+}
+
+/* A caixa de status (Herói e Inimigo) */
+.status-box {
+  background-color: rgba(0, 0, 0, 0.7); /* Fundo preto transparente */
+  padding: 20px;
+  border: 2px solid #C5A059; /* Borda dourada/velha */
+  border-radius: 8px;
+  width: 250px;
+  text-align: center;
+}
+
+/* Os botões de ação */
+.btn-action {
+  padding: 15px 40px;
+  background-color: #4CAF50;
+  color: white;
+  border: 2px solid #2E7D32;
+  border-radius: 8px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.btn-action:hover {
+  background-color: #45a049;
+  transform: scale(1.05); /* Efeito de pular ao passar o mouse */
+}

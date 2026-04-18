@@ -1,13 +1,31 @@
+using First_Game.backend.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+//Configuração do SWAGGER
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// 1. CONFIGURANDO O CORS (O Porteiro)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("PermitirReact", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173") // A porta padrão do Vite/React
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
+// Adicionando suporte a Controllers
+builder.Services.AddControllers();
+
+// Injeção de Dependência: Ensina o C# a entregar o BattleService
+builder.Services.AddScoped<BattleService>();
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configurando o Pipeline (O que acontece quando o servidor roda)
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -16,29 +34,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+// 2. ATIVANDO O CORS
+app.UseCors("PermitirReact");
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+// Ativando as rotas dos Controllers
+app.MapControllers();
 
+//Inicia o servidor para escutar requisições web
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

@@ -15,3 +15,27 @@ Definimos em torno de 10 classes para o herói escolher e enfrentar todas essas 
 
 # Modo de Jogo
 O jogador cria um Herói, escolhe uma classe para ele, enfrenta inimigos, sobe de níveis e recolhe itens dropados, enfrenta 10 inimigos e se vencer todos eles ele ganha.
+
+# Estrutura Padrão no Front-end Criado pelo VITE
+```
+/frontend
+├── /node_modules       <-- Onde ficam os códigos de terceiros (nunca mexa aqui)
+├── /public             <-- Imagens estáticas, ícones (favicon) que não passam pelo código
+├── /src                <-- O SEU REINO. 99% do seu trabalho será aqui.
+│   ├── /assets         <-- Imagens e logos importados no código
+│   ├── App.jsx         <-- O componente principal, a "casca" da sua tela
+│   ├── main.jsx        <-- O ponto de entrada. Ele pega o App.jsx e joga no HTML.
+│   └── index.css       <-- CSS global
+├── index.html          <-- A única página HTML real do projeto
+├── package.json        <-- A "identidade" do projeto e lista de dependências
+└── vite.config.js      <-- Configurações do servidor Vite
+```
+
+# Estrutura como eu apliquei
+```
+/src
+├── /components         <-- Pedacinhos de tela (Ex: BotaoAtaque.jsx, BarraDeVida.jsx)
+├── /pages              <-- Telas inteiras (Ex: TelaBatalha.jsx, TelaSelecaoClasse.jsx)
+├── /services           <-- Arquivos que conversam com o C# (Ex: api.js)
+├── /utils              <-- Funções úteis e matemáticas (Ex: calcularPorcentagemVida.js)
+```
