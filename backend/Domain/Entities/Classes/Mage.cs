@@ -1,14 +1,15 @@
 using System;
 using First_Game.backend.Domain.Enums;
 
-namespace First_Game.backend.Domain.Entities
+namespace First_Game.backend.Domain.Entities.Classes
 {
     public class Mage : Entity
     {
-        public Mage(string name)
+        public Mage(string name, ControlType controller)
         {
             Name = name;
             Class = ClassType.Mage; // Vinculando ao seu Enum
+            Controller = controller;
             
             // Status Iniciais do Mago
             LifeMax = 80;

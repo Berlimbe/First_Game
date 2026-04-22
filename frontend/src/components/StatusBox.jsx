@@ -1,25 +1,28 @@
 import React from 'react';
 
-// Um componente reutilizável que recebe "props" (propriedades)
-export default function StatusBox({ name, life, lifeMax, mana, manaMax }) {
+// 1. Ele PRECISA receber as props exatas que você digitou na BattleArena!
+export default function StatusBox({ name, currentHp, maxHp, currentMp, maxMp }) {
+  
+  // 2. Cálculo simples da porcentagem para a barra verde não vazar da caixa
+  const hpPercentage = Math.max(0, (currentHp / maxHp) * 100);
+
   return (
     <div className="status-box">
-      <h2>{name}</h2>
+      {/* 3. Renderizamos o Nome (que agora já vem com a Classe junto) */}
+      <h3>{name}</h3>
       
-      <div style={{ marginBottom: '10px' }}>
-        <p style={{ margin: '0' }}>HP: {life} / {lifeMax}</p>
-        {/* Barra visual de vida (Vermelha) */}
-        <div style={{ width: '100%', height: '15px', backgroundColor: '#555', borderRadius: '5px' }}>
-          <div style={{ width: '100%', height: '100%', backgroundColor: '#E63946', borderRadius: '5px' }}></div>
-        </div>
+      {/* 4. Textos de HP e MP reais */}
+      <p>HP: {currentHp} / {maxHp}</p>
+      
+      <div className="bar-bg">
+        {/* 5. A barra preenche de acordo com a porcentagem calculada */}
+        <div className="bar-fill hp" style={{ width: `${hpPercentage}%` }}></div>
       </div>
-
-      <div>
-        <p style={{ margin: '0' }}>MP: {mana} / {manaMax}</p>
-        {/* Barra visual de mana (Azul) */}
-        <div style={{ width: '100%', height: '15px', backgroundColor: '#555', borderRadius: '5px' }}>
-          <div style={{ width: '100%', height: '100%', backgroundColor: '#457B9D', borderRadius: '5px' }}></div>
-        </div>
+      
+      <p>MP: {currentMp} / {maxMp}</p>
+      <div className="bar-bg">
+        {/* O MP por enquanto deixamos fixo se quiser, ou fazemos o mesmo cálculo */}
+        <div className="bar-fill mp" style={{ width: '100%' }}></div>
       </div>
     </div>
   );
