@@ -1,4 +1,8 @@
+using First_Game.backend;
 using First_Game.backend.Services;
+using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
+using First_Game.backend.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +27,11 @@ builder.Services.AddControllers();
 // Injeção de Dependência: Ensina o C# a entregar o BattleService
 builder.Services.AddScoped<BattleService>();
 
+//Configuração do SQLite no Program.cs
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite("Data Source=game.db")
+    );
+    
 var app = builder.Build();
 
 // Configurando o Pipeline (O que acontece quando o servidor roda)
