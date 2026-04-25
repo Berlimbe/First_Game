@@ -11,12 +11,10 @@ namespace First_Game.backend.Domain.Entities.Classes
             Class = ClassType.Archer; // Vinculando ao seu Enum
             Controller = controller; // Aqui a gente ta definindo quem ele é
             
-            LifeMax = 120;
-            Life = 120;
-            ManaMax = 45;
-            Mana = 45;
-            Power = 25;
-            Defense = 8;
+            LifeMax = 150;
+            Life = 150;
+            Power = 30;
+            Defense = 4;
         }
 
         public override void ExecuteTurn(Entity target)

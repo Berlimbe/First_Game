@@ -10,5 +10,6 @@ namespace First_Game.backend.Data
         // Definimos quais as tabelas que queremos no banco
         public DbSet<PlayerModel> Players { get; set; }
         public DbSet<RunModel> Runs { get; set; }
+        public DbSet<ItemModel> Items { get; set; }
     }
 }

@@ -13,10 +13,8 @@ namespace First_Game.backend.Domain.Entities.Classes
             
             LifeMax = 180;
             Life = 180;
-            ManaMax = 60;
-            Mana = 10;
             Power = 80;
-            Defense = 18;
+            Defense = 10;
         }
 
         public override void ExecuteTurn(Entity target)

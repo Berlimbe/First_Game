@@ -1,31 +1,49 @@
-import React, { useState } from 'react';
-import BattleArena from './pages/BattleArena';
+import React, { useState } from 'react'; // Apague o useEffect daqui
 import StartScreen from './pages/StartScreen';
+import BattleArena from './pages/BattleArena';
+import './index.css';
 
-function App() {
-  // Estado para saber em qual tela estamos
-  const [currentScreen, setCurrentScreen] = useState("start"); 
-  
-  // Guardamos os IDs que o banco de dados vai gerar para usarmos na batalha depois!
-  const [runId, setRunId] = useState(null);
-  const [playerId, setPlayerId] = useState(null);
+export default function App() {
+  const [runId, setRunId] = useState(() => {
+    const saved = localStorage.getItem("runId");
+    return saved ? parseInt(saved) : null;
+  });
 
-  // Função que a StartScreen vai chamar quando o C# der o OK
-  const handleGameStarted = (newRunId, newPlayerId) => {
-    setRunId(newRunId);
-    setPlayerId(newPlayerId);
-    setCurrentScreen("battle"); // Troca a tela instantaneamente!
+  const [playerId, setPlayerId] = useState(() => {
+    const saved = localStorage.getItem("playerId");
+    return saved ? parseInt(saved) : null;
+  });
+
+  const [gameState, setGameState] = useState(() => {
+    return localStorage.getItem("runId") ? "BATTLE" : "START";
+  });
+
+  // FUNÇÃO PARA RESETAR TUDO
+  const handleReset = () => {
+    localStorage.clear();
+    setRunId(null);
+    setPlayerId(null);
+    setGameState("START");
+  };
+
+  const handleStartGame = (id, pId) => {
+    localStorage.setItem("runId", id);
+    localStorage.setItem("playerId", pId);
+    setRunId(id);
+    setPlayerId(pId);
+    setGameState("BATTLE");
   };
 
   return (
     <div>
-      {/* Sistema clássico de roteamento manual */}
-      {currentScreen === "start" && <StartScreen onStartGame={handleGameStarted} />}
-      
-      {/* Depois enviaremos o runId para a Arena para ela saber quem está lutando */}
-      {currentScreen === "battle" && <BattleArena runId={runId} playerId={playerId} />}
+      {gameState === "START" && <StartScreen onStartGame={handleStartGame} />}
+      {gameState === "BATTLE" && (
+        <BattleArena 
+          runId={runId} 
+          playerId={playerId} 
+          onReset={handleReset} // Passamos a função de reset para a Arena
+        />
+      )}
     </div>
   );
 }
-
-export default App;

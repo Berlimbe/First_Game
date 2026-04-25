@@ -11,12 +11,10 @@ namespace First_Game.backend.Domain.Entities.Classes
             Class = ClassType.Marksman; // Vinculando ao seu Enum
             Controller = controller; // Aqui a gente ta definindo quem ele é
             
-            LifeMax = 110;
-            Life = 110;
-            ManaMax = 32;
-            Mana = 32;
+            LifeMax = 200;
+            Life = 200;
             Power = 45;
-            Defense = 12;
+            Defense = 6;
         }
 
         public override void ExecuteTurn(Entity target)

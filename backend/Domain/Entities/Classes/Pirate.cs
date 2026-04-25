@@ -11,12 +11,10 @@ namespace First_Game.backend.Domain.Entities.Classes
             Class = ClassType.Pirate; // Vinculando ao seu Enum
             Controller = controller; // Aqui a gente ta definindo quem ele é
             
-            LifeMax = 150;
-            Life = 150;
-            ManaMax = 40;
-            Mana = 40;
-            Power = 40;
-            Defense = 15;
+            LifeMax = 200;
+            Life = 200;
+            Power = 80;
+            Defense = 5;
         }
 
         public override void ExecuteTurn(Entity target)

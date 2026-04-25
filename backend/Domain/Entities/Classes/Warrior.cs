@@ -15,10 +15,8 @@ namespace First_Game.backend.Domain.Entities.Classes
             // Status Iniciais
             LifeMax = 150;
             Life = 150;
-            ManaMax = 30;
-            Mana = 30;
-            Power = 15;
-            Defense = 10;
+            Power = 20;
+            Defense = 7;
         }
 
         // Polimorfismo: Como o Guerreiro age no turno

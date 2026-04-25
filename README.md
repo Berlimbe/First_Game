@@ -1,21 +1,32 @@
 # ⚔️ First Game RPG - Full-Stack Dark Fantasy
 
-Um projeto Full-Stack focado no estudo profundo de **Arquitetura de Software**, construído com C# (.NET 8) e React (Vite). O objetivo principal é aplicar princípios de **POO (Programação Orientada a Objetos)**, **Design Patterns (Strategy, Factory)** e **DDD (Domain-Driven Design)** para gerenciar mecânicas complexas de combate em turnos através de comunicação RESTful (JSON).
+Um projeto Full-Stack focado no estudo profundo de **Arquitetura de Software**, construído com C# (.NET 8) e React (Vite). O objetivo principal é aplicar princípios de **POO (Programação Orientada a Objetos)**, **Design Patterns (Strategy, Factory)** e **DDD (Domain-Driven Design)** para gerenciar mecânicas complexas de combate em turnos, persistência de dados e progressão de RPG através de comunicação RESTful (JSON).
 
-## 🎮 Modo de Jogo (Game Flow)
-O jogador cria um Herói, escolhe entre 11 classes disponíveis e entra em uma masmorra estilo *Roguelike/Boss Rush*. O herói enfrenta inimigos gerados proceduralmente (com nomes e classes aleatórias que afetam seus status base). Ao chegar no 11º andar, o jogador enfrenta um Boss colossal, cujos atributos e narrativa (Lore) são gerados pela fusão de 3 classes distintas.
+## 📊 Nível de Desenvolvimento
+**Status atual:** 🟢 Alpha / Core Game Loop Funcional
+A fundação bruta do jogo (Back-end, Banco de Dados, API e Front-end) está construída e interligada. O ciclo de jogo (Iniciar Partida ➔ Batalhar ➔ Subir de Nível ➔ Coletar Loot ➔ Avançar Andar) funciona perfeitamente de ponta a ponta.
+
+## 🛠️ Ferramentas e Tecnologias
+* **Back-end:** C# 12, .NET 8, ASP.NET Core Web API.
+* **Banco de Dados:** SQLite e Entity Framework Core (Code-First & Migrations).
+* **Front-end:** React 18, Vite, Axios (para requisições HTTP).
+* **Arquitetura & Patterns:** Domain-Driven Design (DDD), Strategy Pattern, Factory Method.
+
+## 🎮 Modo de Jogo (O que fizemos até o momento)
+O jogador cria um Herói, escolhe entre 11 classes disponíveis e entra em uma masmorra infinita estilo *Roguelike*. As mecânicas atuais incluem:
+* **Progressão Infinita e Escalável:** Inimigos normais ficam mais fortes a cada andar concluído. 
+* **Boss Rush:** A cada 10 andares, o jogador enfrenta um "Lorde" com atributos massivos e habilidades únicas.
+* **Sistema de Level Up:** XP ganho por derrotar inimigos. Ao atingir 100 de XP, o jogador sobe de nível, recuperando HP e ganhando status permanentes (Poder Base e Defesa).
+* **Sistema de Inventário (Loot):** Sorteios (RNG) de itens ao vencer batalhas. O jogador pode encontrar poções de cura, elixires de dano, amuletos da sorte (que geram outros itens), amuletos amaldiçoados e anéis equipáveis que concedem buffs passivos percentuais.
+* **Persistência de Sessão:** O uso de `localStorage` em conjunto com o Banco de Dados permite que o jogador recarregue a página (F5) ou feche o navegador sem perder a sua "Run" atual.
 
 ---
 
 ## 🏗️ Estruturação da Arquitetura Back-end (C# / .NET)
-O Back-end foi desenhado utilizando os princípios do **Domain-Driven Design (DDD)**, garantindo que as regras de negócio fiquem isoladas e independentes do banco de dados ou da internet.
-
-* **`Domain` (O Coração do Sistema):**
-  * `Entities:` Modelos e comportamentos reais dos personagens (ex: Mago, Guerreiro, Boss).
-  * `Interfaces:` Contratos que definem *o que* as entidades fazem (ex: `ITakeDamage`), sem se importar com *como* fazem.
-  * `Enums:` Tipagens fortes (ex: `ControlType.AI`) para evitar o uso de "Magic Strings" e prevenir bugs de digitação.
-* **`Services`:** Os orquestradores. Eles pegam as entidades do Domínio e aplicam a lógica de combate (Cálculos de dano, turnos).
-* **`Controllers`:** Os porteiros da API. Eles recebem os DTOs (Data Transfer Objects) do React via requisição HTTP, acionam os Services e salvam os resultados no banco de dados usando o Entity Framework.
+O Back-end foi desenhado utilizando os princípios do **Domain-Driven Design (DDD)**, garantindo que as regras de negócio fiquem isoladas.
+* **`Domain`:** Entidades (Mago, Guerreiro), Interfaces (`IAttackStrategy`) e Enums.
+* **`Models`:** Espelhos das tabelas do banco de dados (ex: `RunModel`, `ItemModel`).
+* **`Controllers`:** Os porteiros da API (ex: `BattleController`, `InventoryController`). Recebem os DTOs, aplicam as estratégias de combate, atualizam os itens e salvam no banco.
 
 ---
 
@@ -24,32 +35,21 @@ O Front-end foi organizado para máxima reutilização de código e separação 
 
 ```
 /frontend
-├── /node_modules       <-- Dependências gerenciadas pelo NPM
-├── /public             <-- Assets estáticos que não passam pelo build (ex: favicon)
-├── /src                <-- Código-fonte principal da aplicação
-│   ├── /assets         <-- Imagens, backgrounds e ícones
-│   ├── /components     <-- Componentes reutilizáveis (Ex: StatusBox.jsx, ActionButton.jsx)
-│   ├── /pages          <-- Telas e rotas (Ex: StartScreen.jsx, BattleArena.jsx)
-│   ├── /services       <-- Centralização de chamadas do Axios para a API (C#)
-│   ├── /utils          <-- Funções puras e cálculos auxiliares
-│   ├── App.jsx         <-- Roteador e gerenciador de estado global
-│   ├── main.jsx        <-- Ponto de montagem do React no DOM
-│   └── index.css       <-- Estilização global Dark Fantasy
-├── index.html          <-- Template base
-└── package.json        <-- Configurações e scripts do projeto
+├── /src
+│   ├── /components    <-- Componentes reutilizáveis (StatusBox.jsx, InventoryModal.jsx)
+│   ├── /pages         <-- Telas principais (StartScreen.jsx, BattleArena.jsx)
+│   ├── App.jsx        <-- Roteador, Lazy Initialization e gerenciamento do localStorage
+│   └── index.css      <-- Estilização global Dark Fantasy
 ```
 
-## Lições Aprendidas e Refatorações Técnicas
-Durante o desenvolvimento, algumas decisões arquiteturais foram tomadas para melhorar a qualidade do código:
-- No Fall-Through no Switch/Case: O compilador rigoroso do C# exige o uso explícito de break; em cases com lógica. Isso evitou bugs silenciosos onde uma classe poderia herdar status não intencionais de outra (ex: Marksman "caindo" no Necromancer).
-- Aplicação da Regra DRY (Don't Repeat Yourself): Inicialmente, a lógica de instanciar classes estava duplicada nas rotas de criação e resgate do banco. O código foi refatorado utilizando o padrão Factory Method (CriarEntidade),centralizando a criação e deixando os Controllers limpos.
-- Uso de Tuplas (C# Tuples): Em vez de criar classes temporárias (DTOs) descartáveis apenas para transitar múltiplos retornos (ex: a Lore do Boss que retorna a História, Classe Atual e Classe do Passado), foi adotado o uso de Tuplas, garantindo alta performance e um código mais elegante.
+## Lições Aprendidas e Principais Dificuldades
+Construir um ecossistema onde o Front e o Back precisam concordar matematicamente gerou excelentes desafios técnicos:
+- Sincronização de Estado (React vs C#): A maior dificuldade inicial foi garantir que a interface reagisse exatamente aos cálculos do servidor. O clássico bug do "jogador curar ao ser atacado" (devido a status de Defesa gerarem dano negativo) e a renderização incorreta de XP exigiram uma arquitetura de resposta (Response Objects) mais rígida e sincronizada.
+- O Desafio do useEffect: Lidar com renderizações em cascata e requisições fantasmas. Resolvemos isso utilizando Lazy Initialization nos estados principais (useState) para ler o localStorage de forma otimizada.
+- O Poder do Strategy Pattern: Substituir uma teia de If/Else por Interfaces. O combate agora utiliza o IAttackStrategy como um "chip" plugável: o controlador não precisa saber qual é a classe do jogador, ele apenas executa o .CalculateDamage() da estratégia equipada. Isso facilitou enormemente a adição de bônus de inventário (Poções e Anéis).
+- Migrações On-The-Fly (Entity Framework): Aprender a alterar a estrutura de um banco de dados relacional em produção (adicionando colunas de Nível, XP e criando a tabela de Itens) sem quebrar o código existente.
 
-## Roadmap e Bugs Conhecidos (Próximos Passos)
-- [ ] UI do Alerta do Boss: Substituir o alert() nativo do navegador por um Modal/Toast estilizado no React, evitando a quebra de imersão.
-
-- [ ] Renderização de Status: Corrigir a passagem de props para o componente StatusBox.jsx para que o HP atual e máximo do Jogador/Inimigo sejam exibidos corretamente na tela.
-
-- [ ] Implementação do Strategy Pattern: Criar a mecânica do botão "Atacar", onde o C# define a resposta do Inimigo baseando-se em estratégias dinâmicas atreladas à porcentagem de HP restante.
-
-##
+## Próximos passos
+- [ ] Animações e Game Feel: Adicionar screen shake (tremor de tela), números de dano subindo e transições suaves nas barras de HP usando CSS ou bibliotecas de animação.
+- [ ] Sistema de Mana e Habilidades Dinâmicas: Reativar a barra de MP e criar custos reais para as habilidades especiais de cada classe.
+- [ ] Feedback Sonoro: Adicionar efeitos de áudio (SFX) para ataques, uso de poções, level up e trilha sonora de tensão contra os Chefões.

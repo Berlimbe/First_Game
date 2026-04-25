@@ -1,29 +1,35 @@
-import React from 'react';
-
-// 1. Ele PRECISA receber as props exatas que você digitou na BattleArena!
-export default function StatusBox({ name, currentHp, maxHp, currentMp, maxMp }) {
-  
-  // 2. Cálculo simples da porcentagem para a barra verde não vazar da caixa
-  const hpPercentage = Math.max(0, (currentHp / maxHp) * 100);
+export default function StatusBox({ name, level, className, currentHp, maxHp }) {
+  // Se o maxHp vier errado ou nulo, a barra quebra. Usamos um fallback (|| 1)
+  const safeMaxHp = maxHp || currentHp || 1;
+  const hpPercent = Math.max(0, Math.min(100, (currentHp / safeMaxHp) * 100));
 
   return (
-    <div className="status-box">
-      {/* 3. Renderizamos o Nome (que agora já vem com a Classe junto) */}
-      <h3>{name}</h3>
+    <div className="status-box" style={styles.box}>
+      <h3 style={{ margin: '0 0 5px 0' }}>{name}</h3>
       
-      {/* 4. Textos de HP e MP reais */}
-      <p>HP: {currentHp} / {maxHp}</p>
-      
-      <div className="bar-bg">
-        {/* 5. A barra preenche de acordo com a porcentagem calculada */}
-        <div className="bar-fill hp" style={{ width: `${hpPercentage}%` }}></div>
+      {/* Exibindo Nível e Classe juntos e organizados */}
+      <div style={{ fontSize: '0.85rem', color: '#aaa', margin: '0 0 10px 0' }}>
+        {level && <div style={{ marginBottom: '2px' }}>Nv. {level}</div>}
+        {className && <div>{className}</div>}
       </div>
       
-      <p>MP: {currentMp} / {maxMp}</p>
-      <div className="bar-bg">
-        {/* O MP por enquanto deixamos fixo se quiser, ou fazemos o mesmo cálculo */}
-        <div className="bar-fill mp" style={{ width: '100%' }}></div>
+      <div style={{ textAlign: 'center', marginBottom: '5px', fontSize: '0.9rem' }}>
+        HP: {currentHp} / {safeMaxHp}
+      </div>
+      
+      <div style={styles.barBg}>
+        <div style={{ 
+          width: `${hpPercent}%`, 
+          backgroundColor: '#e63946', 
+          height: '100%', 
+          transition: 'width 0.5s ease-in-out' 
+        }}></div>
       </div>
     </div>
   );
 }
+
+const styles = {
+  box: { border: '2px solid #444', padding: '15px', borderRadius: '8px', backgroundColor: 'rgba(0,0,0,0.9)', color: 'white', width: '220px', textAlign: 'center' },
+  barBg: { width: '100%', backgroundColor: '#333', height: '12px', borderRadius: '10px', overflow: 'hidden', border: '1px solid #555' }
+};

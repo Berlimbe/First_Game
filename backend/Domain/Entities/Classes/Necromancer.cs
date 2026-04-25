@@ -11,12 +11,10 @@ namespace First_Game.backend.Domain.Entities.Classes
             Class = ClassType.Necromancer; // Vinculando ao seu Enum
             Controller = controller; // Aqui a gente ta definindo quem ele é
             
-            LifeMax = 170;
-            Life = 170;
-            ManaMax = 60;
-            Mana = 60;
-            Power = 50;
-            Defense = 11;
+            LifeMax = 250;
+            Life = 250;
+            Power = 25;
+            Defense = 12;
         }
 
         public override void ExecuteTurn(Entity target)

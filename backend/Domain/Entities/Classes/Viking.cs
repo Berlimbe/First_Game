@@ -11,12 +11,10 @@ namespace First_Game.backend.Domain.Entities.Classes
             Class = ClassType.Viking; // Vinculando ao seu Enum
             Controller = controller; // Aqui a gente ta definindo quem ele é
             
-            LifeMax = 200;
-            Life = 200;
-            ManaMax = 0;
-            Mana = 0;
-            Power = 60;
-            Defense = 17;
+            LifeMax = 280;
+            Life = 280;
+            Power = 50;
+            Defense = 15;
         }
 
         public override void ExecuteTurn(Entity target)

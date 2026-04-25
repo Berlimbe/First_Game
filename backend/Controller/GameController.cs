@@ -27,6 +27,8 @@ namespace First_Game.backend.Controllers
                 SelectedClass = request.ClassName
             };
 
+            Entity playerVirtual = CreateEntity(newPlayer.SelectedClass, newPlayer.Name);
+
             _context.Players.Add(newPlayer);
             _context.SaveChanges();
 
@@ -36,8 +38,8 @@ namespace First_Game.backend.Controllers
             int enemyMaxHp;
             string? bossLore = null; // Começa vazio
 
-            // ATENÇÃO: Mude para 11 se quiser testar o Boss agora mesmo!
-            int currentRound = 11;
+            // Mude para 11 se para testar o Boss
+            int currentRound = 1;
             double difficultyMultiplier = 1.0 + (currentRound * 0.1);
 
             // SE FOR O BOSS (ANDAR 11)
@@ -46,7 +48,7 @@ namespace First_Game.backend.Controllers
                 var bossData = GenerateBossStory(); // Chama a tupla
                 bossLore = bossData.lore;
                 enemyClass = bossData.currentClass;
-                enemyName = "Lord of Cinders"; 
+                enemyName = "Lord of Cinders";
 
                 // Cria as entidades baseadas nas strings retornadas!
                 Entity pastEntity = CreateEntity(bossData.pastClass, enemyName);
@@ -85,7 +87,9 @@ namespace First_Game.backend.Controllers
                 EnemyClass = enemyClass,
                 EnemyMaxHp = enemyMaxHp,
                 EnemyCurrentHp = enemyMaxHp,
-                BossLore = bossLore
+                BossLore = bossLore,
+                PlayerCurrentHp = playerVirtual.Life,
+                PlayerMaxHp = playerVirtual.Life
             };
 
             _context.Runs.Add(newRun);
@@ -104,6 +108,7 @@ namespace First_Game.backend.Controllers
         [HttpGet("run/{runId}")]
         public IActionResult GetRunStatus(int runId)
         {
+
             var run = _context.Runs.FirstOrDefault(r => r.Id == runId);
             if (run == null) return NotFound("Partida não encontrada.");
 
@@ -113,10 +118,45 @@ namespace First_Game.backend.Controllers
             // Usando a nossa nova Mini-Fábrica para ficar limpo!
             Entity playerVirtual = CreateEntity(player.SelectedClass, player.Name);
 
+            string[] habilidadesIniciais;
+            switch (player.SelectedClass)
+            {
+                case "Mage": habilidadesIniciais = new[] { "Bola de Fogo", "Lança Espiritual", "Feixe de Luz Transluzente" }; break;
+                case "Warrior": habilidadesIniciais = new[] { "Corte Profundo", "Combo de Golpes", "Fúria do Soldado de Elite" }; break;
+                case "Archer": habilidadesIniciais = new[] { "Flechada Certeira", "Flechas em Dobro", "Tempestade de Flechas" }; break;
+                case "Cleric": habilidadesIniciais = new[] { "Porrada de Cajado", "Magia de Invitalidade", "Magia Suprema da Eternidade" }; break;
+                case "Assassin": habilidadesIniciais = new[] { "Apunhalada de Adaga", "Salto Mortal", "Combo do Assassino" }; break;
+                case "Barbarian": habilidadesIniciais = new[] { "Estocada Bárbara", "Corte de Espada Pesada", "Três espadas do Louco" }; break;
+                case "Pirate": habilidadesIniciais = new[] { "Sabre de Sangue", "Escopeta Amaldiçoada", "Espada da Invocação do Kraken" }; break;
+                case "Hunter": habilidadesIniciais = new[] { "Corte Impiedoso", "Armas do Caçador", "Ritual de Caça: Coração Pulsante" }; break;
+                case "Viking": habilidadesIniciais = new[] { "Ataque Bárbaro", "Machadada Dupla", "Berserker" }; break;
+                case "Marksman": habilidadesIniciais = new[] { "Bala Certeira", "Artigo de Balas", "Fúria do Pistoleiro: Kick-Shot" }; break;
+                case "Necromancer": habilidadesIniciais = new[] { "Mortos-vivos", "Golem de Carne Transmumificado", "Magia-extrema: Gigante dos céus" }; break;
+
+                default: habilidadesIniciais = new[] { "Ataque Básico", "Defesa", "Fuga" }; break;
+            }
+
             var response = new
             {
-                player = new { name = player.Name, className = player.SelectedClass, currentHp = playerVirtual.Life, maxHp = playerVirtual.Life },
-                enemy = new { name = run.EnemyName, className = run.EnemyClass, currentHp = run.EnemyCurrentHp, maxHp = run.EnemyMaxHp, bossLore = run.BossLore },
+                player = new
+                {
+                    name = player.Name,
+                    className = player.SelectedClass,
+                    currentHp = run.PlayerCurrentHp,
+                    maxHp = run.PlayerCurrentHp,
+                    skills = habilidadesIniciais,
+                    xp = run.PlayerXp,     
+                    level = run.PlayerLevel
+                },
+
+                enemy = new
+                {
+                    name = run.EnemyName,
+                    className = run.EnemyClass,
+                    currentHp = run.EnemyCurrentHp,
+                    maxHp = run.EnemyMaxHp,
+                    bossLore = run.BossLore,
+                },
                 round = run.CurrentRound
             };
 

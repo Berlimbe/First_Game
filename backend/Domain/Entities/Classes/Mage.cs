@@ -12,12 +12,10 @@ namespace First_Game.backend.Domain.Entities.Classes
             Controller = controller;
             
             // Status Iniciais do Mago
-            LifeMax = 80;
-            Life = 80;
-            ManaMax = 200;
-            Mana = 200;
-            Power = 5; // Ataque físico base é bem fraco
-            Defense = 4;
+            LifeMax = 180;
+            Life = 180;
+            Power = 50; 
+            Defense = 20;
         }
 
         public override void ExecuteTurn(Entity alvo)

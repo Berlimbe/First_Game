@@ -123,7 +123,7 @@ export default function StartScreen({ onStartGame }) {
             <option value="Viking">Viking (Viking)</option>
             <option value="Hunter">Hunter (Caçador)</option>
             <option value="Marksman">Marksman (Atirador)</option>
-            <option value="Necromance">Necromance (Necromante)</option>
+            <option value="Necromancer">Necromancer (Necromante)</option>
             <option value="Barbarian">Barbarian (Bárbaro)</option>
           </select>
         </div>
